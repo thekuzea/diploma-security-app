@@ -1,11 +1,12 @@
 package com.thekuzea.diploma.gui.frame;
 
-import com.thekuzea.diploma.blocker.AppBlocker;
-import com.thekuzea.diploma.blocker.WebsiteBlocker;
 import com.thekuzea.diploma.model.App;
 import com.thekuzea.diploma.model.User;
 import com.thekuzea.diploma.model.Website;
 import com.thekuzea.diploma.repository.UserRepository;
+import com.thekuzea.diploma.restrict.AppRestrictingUtils;
+import com.thekuzea.diploma.restrict.WebsiteRestrictingUtils;
+
 import org.springframework.stereotype.Component;
 
 import javax.swing.*;
@@ -40,7 +41,7 @@ public class UserFrame extends JFrame {
 
     private Timer timerForLists = new Timer(3000, e -> reloadLists());
     private Timer timerUploadingWebsiteRestrictions = new Timer(3000, e -> {
-        WebsiteBlocker.uploadFile(currentUser.getForbiddenWebsites());
+        WebsiteRestrictingUtils.updateHostsFileOnDemand(currentUser.getForbiddenWebsites());
     });
     private Timer timerForKillingProcesses;
 
@@ -50,7 +51,7 @@ public class UserFrame extends JFrame {
         currentUser = this.userRepository.findByUsername(USERNAME);
         timerForKillingProcesses = new Timer(3000, e -> {
             try {
-                AppBlocker.parseProcessList(currentUser.getForbiddenApps());
+                AppRestrictingUtils.queryProcessListAndKillOnDemand(currentUser.getForbiddenApps());
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
