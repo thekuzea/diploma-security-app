@@ -125,14 +125,19 @@ public class AddNewApp extends JFrame {
         submit.addActionListener(e -> {
             if(appText.getText().length() > 0) {
 
-                if(foreverBlockCheckbox.isSelected()) {
-                    transmittableApp = new App(appText.getText(), true);
+                if (foreverBlockCheckbox.isSelected()) {
+                    transmittableApp = App.builder()
+                            .name(appText.getText())
+                            .isInfiniteRestriction(true)
+                            .build();
                 } else {
                     try {
-                        transmittableApp = new App(appText.getText(),
-                                false,
-                                parseTime(timeStartText.getText()),
-                                parseTime(timeEndText.getText()));
+                        transmittableApp = App.builder()
+                                .name(appText.getText())
+                                .isInfiniteRestriction(false)
+                                .restrictionStartTime(parseTime(timeStartText.getText()))
+                                .restrictionEndTime(parseTime(timeEndText.getText()))
+                                .build();
                     } catch (IllegalArgumentException ignored) {
                         timeStartText.setText("");
                         timeEndText.setText("");

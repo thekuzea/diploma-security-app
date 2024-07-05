@@ -50,7 +50,10 @@ public class AddNewUser extends JFrame {
         submit = new JButton("Submit");
         submit.addActionListener(e -> {
             if(usernameText.getText().length() > 0) {
-                transmittableUser = new User(usernameText.getText(), roleText.getText());
+                transmittableUser = User.builder()
+                        .username(usernameText.getText())
+                        .role(roleText.getText())
+                        .build();
                 userRepository.save(transmittableUser);
 
                 usersPanel.addNewUser(transmittableUser);

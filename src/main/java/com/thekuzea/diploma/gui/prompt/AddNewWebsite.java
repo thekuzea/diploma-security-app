@@ -126,13 +126,18 @@ public class AddNewWebsite extends JFrame {
             if(websiteText.getText().length() > 0) {
 
                 if(foreverBlockCheckbox.isSelected()) {
-                    transmittableWebsite = new Website(websiteText.getText(), true);
+                    transmittableWebsite = Website.builder()
+                            .url(websiteText.getText())
+                            .isInfiniteRestriction(true)
+                            .build();
                 } else {
                     try {
-                        transmittableWebsite = new Website(websiteText.getText(),
-                                false,
-                                parseTime(timeStartText.getText()),
-                                parseTime(timeEndText.getText()));
+                        transmittableWebsite = Website.builder()
+                                .url(websiteText.getText())
+                                .isInfiniteRestriction(false)
+                                .restrictionStartTime(parseTime(timeStartText.getText()))
+                                .restrictionEndTime(parseTime(timeEndText.getText()))
+                                .build();
                     } catch (IllegalArgumentException | StringIndexOutOfBoundsException ignored) {
                         return;
                     }
