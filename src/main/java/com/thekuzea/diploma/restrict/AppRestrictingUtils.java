@@ -1,8 +1,5 @@
 package com.thekuzea.diploma.restrict;
 
-import com.thekuzea.diploma.model.App;
-import com.thekuzea.diploma.model.RestrictedEntity;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,6 +12,9 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.CollectionUtils;
+
+import com.thekuzea.diploma.model.App;
+import com.thekuzea.diploma.model.RestrictedEntity;
 
 import static com.thekuzea.diploma.restrict.OperatingSystemUtils.MAC;
 import static com.thekuzea.diploma.restrict.OperatingSystemUtils.OS_NAME;
@@ -35,7 +35,7 @@ public class AppRestrictingUtils {
 
     private static final int PROCESS_ID_INDEX = System.getProperty(OS_NAME).contains(MAC) ? MAC_PROCESS_ID_INDEX : LINUX_PROCESS_ID_INDEX;
 
-    public static void queryProcessListAndKillOnDemand(final List<App> appList) throws IOException {
+    public static void queryProcessListAndKillOnDemand(final List<App> appList) {
         final List<String> processInformationList = getProcessInformationList();
         if (CollectionUtils.isEmpty(processInformationList)) {
             return;

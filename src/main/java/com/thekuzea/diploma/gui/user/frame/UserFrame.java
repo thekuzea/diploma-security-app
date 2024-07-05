@@ -1,5 +1,22 @@
 package com.thekuzea.diploma.gui.user.frame;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.util.List;
+import javax.swing.DefaultListModel;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.SwingConstants;
+import javax.swing.Timer;
+
+import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+
 import com.thekuzea.diploma.model.App;
 import com.thekuzea.diploma.model.User;
 import com.thekuzea.diploma.model.Website;
@@ -7,58 +24,44 @@ import com.thekuzea.diploma.repository.UserRepository;
 import com.thekuzea.diploma.restrict.AppRestrictingUtils;
 import com.thekuzea.diploma.restrict.WebsiteRestrictingUtils;
 
-import org.springframework.stereotype.Component;
-
-import javax.swing.*;
-import java.awt.*;
-import java.io.IOException;
-import java.util.List;
-
 import static com.thekuzea.diploma.MainClass.USERNAME;
 
 @Component
+@RequiredArgsConstructor
 public class UserFrame extends JFrame {
 
-    private JPanel mainPanel;
-    private JPanel websitesPanel;
-    private JPanel appsPanel;
+    private static final String USER_WINDOW_NAME = "LocalWall";
 
-    private JLabel mainLabel;
-    private JLabel websitesLabel;
-    private JLabel appsLabel;
+    private static final int USER_WINDOW_WIDTH = 630;
+
+    private static final int USER_WINDOW_HEIGHT = 430;
+
+    private static final int TIMER_DELAY_MILLIS = 3000;
+
+    private final transient UserRepository userRepository;
 
     private DefaultListModel<Website> websiteModel;
-    private JList<Website> listOfWebsites;
 
     private DefaultListModel<App> appModel;
-    private JList<App> listOfApps;
 
-    private JScrollPane websitesScrollPane;
-    private JScrollPane appsScrollPane;
-
-    private UserRepository userRepository;
     private User currentUser;
 
-    private Timer timerForLists = new Timer(3000, e -> reloadLists());
-    private Timer timerUploadingWebsiteRestrictions = new Timer(3000, e -> {
-        WebsiteRestrictingUtils.updateHostsFileOnDemand(currentUser.getForbiddenWebsites());
-    });
-    private Timer timerForKillingProcesses;
+    private Timer timerForLists = new Timer(TIMER_DELAY_MILLIS, e -> reloadLists());
 
-    public UserFrame(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    private Timer timerUploadingWebsiteRestrictions = new Timer(
+            TIMER_DELAY_MILLIS,
+            e -> WebsiteRestrictingUtils.updateHostsFileOnDemand(currentUser.getForbiddenWebsites())
+    );
 
-        currentUser = this.userRepository.findByUsername(USERNAME);
-        timerForKillingProcesses = new Timer(3000, e -> {
-            try {
-                AppRestrictingUtils.queryProcessListAndKillOnDemand(currentUser.getForbiddenApps());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+    @PostConstruct
+    public void init() {
+        currentUser = userRepository.findByUsername(USERNAME);
+        Timer timerForKillingProcesses = new Timer(TIMER_DELAY_MILLIS, e -> {
+            AppRestrictingUtils.queryProcessListAndKillOnDemand(currentUser.getForbiddenApps());
         });
 
-        this.setTitle("LocalWall");
-        this.setSize(630, 430);
+        this.setTitle(USER_WINDOW_NAME);
+        this.setSize(USER_WINDOW_WIDTH, USER_WINDOW_HEIGHT);
         this.setLocationRelativeTo(null);
         this.add(getMainPanel());
 
@@ -68,7 +71,7 @@ public class UserFrame extends JFrame {
     }
 
     private JPanel getMainPanel() {
-        mainPanel = new JPanel();
+        final JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
 
         mainPanel.add(getMainLabel(), BorderLayout.NORTH);
@@ -79,7 +82,7 @@ public class UserFrame extends JFrame {
     }
 
     private JLabel getMainLabel() {
-        mainLabel = new JLabel();
+        final JLabel mainLabel = new JLabel();
         mainLabel.setText("Lists of blocked services");
         mainLabel.setHorizontalAlignment(SwingConstants.CENTER);
         mainLabel.setPreferredSize(new Dimension(200, 40));
@@ -88,12 +91,12 @@ public class UserFrame extends JFrame {
     }
 
     private JPanel getWebsitesPanel() {
-        websitesPanel = new JPanel();
+        final JPanel websitesPanel = new JPanel();
         websitesPanel.setLayout(new FlowLayout());
         websitesPanel.setPreferredSize(new Dimension(300, 320));
         websitesPanel.add(getWebsitesLabel());
 
-        websitesScrollPane = new JScrollPane(getListOfWebsites());
+        final JScrollPane websitesScrollPane = new JScrollPane(getListOfWebsites());
         websitesScrollPane.setPreferredSize(new Dimension(250, 300));
         websitesPanel.add(websitesScrollPane);
 
@@ -101,7 +104,7 @@ public class UserFrame extends JFrame {
     }
 
     private JLabel getWebsitesLabel() {
-        websitesLabel = new JLabel();
+        final JLabel websitesLabel = new JLabel();
         websitesLabel.setText("Websites list: ");
 
         return websitesLabel;
@@ -110,10 +113,11 @@ public class UserFrame extends JFrame {
     private void initWebsiteModel() {
         List<Website> tempWebsiteList = currentUser.getForbiddenWebsites();
         try {
-            for(int i=0; i != tempWebsiteList.size(); ++i) {
+            for (int i = 0; i != tempWebsiteList.size(); ++i) {
                 websiteModel.add(i, tempWebsiteList.get(i));
             }
-        } catch (NullPointerException ignored) { }
+        } catch (NullPointerException ignored) {
+        }
     }
 
     private JList<Website> getListOfWebsites() {
@@ -121,19 +125,19 @@ public class UserFrame extends JFrame {
 
         initWebsiteModel();
 
-        listOfWebsites = new JList<>(websiteModel);
+        final JList<Website> listOfWebsites = new JList<>(websiteModel);
         listOfWebsites.setLayoutOrientation(JList.VERTICAL);
 
         return listOfWebsites;
     }
 
     private JPanel getAppsPanel() {
-        appsPanel = new JPanel();
+        final JPanel appsPanel = new JPanel();
         appsPanel.setLayout(new FlowLayout());
         appsPanel.setPreferredSize(new Dimension(300, 320));
         appsPanel.add(getAppsLabel());
 
-        appsScrollPane = new JScrollPane(getListOfApps());
+        final JScrollPane appsScrollPane = new JScrollPane(getListOfApps());
         appsScrollPane.setPreferredSize(new Dimension(250, 300));
         appsPanel.add(appsScrollPane);
 
@@ -141,7 +145,7 @@ public class UserFrame extends JFrame {
     }
 
     private JLabel getAppsLabel() {
-        appsLabel = new JLabel();
+        final JLabel appsLabel = new JLabel();
         appsLabel.setText("Applications list: ");
 
         return appsLabel;
@@ -150,10 +154,11 @@ public class UserFrame extends JFrame {
     private void initAppModel() {
         List<App> tempAppList = currentUser.getForbiddenApps();
         try {
-            for(int i=0; i != tempAppList.size(); ++i) {
+            for (int i = 0; i != tempAppList.size(); ++i) {
                 appModel.add(i, tempAppList.get(i));
             }
-        } catch (NullPointerException ignored) { }
+        } catch (NullPointerException ignored) {
+        }
     }
 
     private JList<App> getListOfApps() {
@@ -161,7 +166,7 @@ public class UserFrame extends JFrame {
 
         initAppModel();
 
-        listOfApps = new JList<>(appModel);
+        final JList<App> listOfApps = new JList<>(appModel);
         listOfApps.setLayoutOrientation(JList.VERTICAL);
 
         return listOfApps;
@@ -176,5 +181,4 @@ public class UserFrame extends JFrame {
         appModel.clear();
         initAppModel();
     }
-
 }

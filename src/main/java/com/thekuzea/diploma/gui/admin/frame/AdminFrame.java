@@ -1,35 +1,43 @@
 package com.thekuzea.diploma.gui.admin.frame;
 
+import java.awt.BorderLayout;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+
 import com.thekuzea.diploma.gui.admin.panel.AppsPanel;
 import com.thekuzea.diploma.gui.admin.panel.UsersPanel;
 import com.thekuzea.diploma.gui.admin.panel.WebsitesPanel;
-import org.springframework.stereotype.Component;
-
-import javax.swing.*;
-import java.awt.*;
 
 @Component
+@RequiredArgsConstructor
 public class AdminFrame extends JFrame {
 
-    private JPanel mainPanel;
+    private static final String ADMIN_WINDOW_NAME = "LocalWall: Admin Panel";
 
-    private UsersPanel usersPanel;
-    private WebsitesPanel websitesPanel;
-    private AppsPanel appsPanel;
+    private static final int ADMIN_WINDOW_WIDTH = 770;
 
-    public AdminFrame(UsersPanel usersPanel, WebsitesPanel websitesPanel, AppsPanel appsPanel) {
-        this.usersPanel = usersPanel;
-        this.websitesPanel = websitesPanel;
-        this.appsPanel = appsPanel;
+    private static final int ADMIN_WINDOW_HEIGHT = 400;
 
-        this.setTitle("LocalWall: Admin Panel");
-        this.setSize(770, 400);
+    private final UsersPanel usersPanel;
+
+    private final WebsitesPanel websitesPanel;
+
+    private final AppsPanel appsPanel;
+
+    @PostConstruct
+    public void init() {
+        this.setTitle(ADMIN_WINDOW_NAME);
+        this.setSize(ADMIN_WINDOW_WIDTH, ADMIN_WINDOW_HEIGHT);
         this.setLocationRelativeTo(null);
         this.add(getMainPanel());
     }
 
     private JPanel getMainPanel() {
-        mainPanel = new JPanel();
+        final JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
 
         mainPanel.add(usersPanel, BorderLayout.WEST);
