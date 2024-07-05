@@ -1,7 +1,7 @@
 package com.thekuzea.diploma.controller;
 
-import com.thekuzea.diploma.gui.frame.AdminFrame;
-import com.thekuzea.diploma.gui.frame.UserFrame;
+import com.thekuzea.diploma.gui.admin.frame.AdminFrame;
+import com.thekuzea.diploma.gui.user.frame.UserFrame;
 import com.thekuzea.diploma.model.User;
 import com.thekuzea.diploma.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

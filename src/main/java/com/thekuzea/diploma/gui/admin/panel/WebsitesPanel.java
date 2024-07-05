@@ -1,6 +1,6 @@
-package com.thekuzea.diploma.gui.panel;
+package com.thekuzea.diploma.gui.admin.panel;
 
-import com.thekuzea.diploma.gui.prompt.AddNewWebsite;
+import com.thekuzea.diploma.gui.admin.prompt.AddNewWebsite;
 import com.thekuzea.diploma.model.Website;
 import com.thekuzea.diploma.repository.WebsiteRepository;
 import org.springframework.beans.factory.annotation.Autowired;

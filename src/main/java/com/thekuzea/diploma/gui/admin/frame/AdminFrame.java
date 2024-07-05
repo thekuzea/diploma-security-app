@@ -1,8 +1,8 @@
-package com.thekuzea.diploma.gui.frame;
+package com.thekuzea.diploma.gui.admin.frame;
 
-import com.thekuzea.diploma.gui.panel.AppsPanel;
-import com.thekuzea.diploma.gui.panel.UsersPanel;
-import com.thekuzea.diploma.gui.panel.WebsitesPanel;
+import com.thekuzea.diploma.gui.admin.panel.AppsPanel;
+import com.thekuzea.diploma.gui.admin.panel.UsersPanel;
+import com.thekuzea.diploma.gui.admin.panel.WebsitesPanel;
 import org.springframework.stereotype.Component;
 
 import javax.swing.*;

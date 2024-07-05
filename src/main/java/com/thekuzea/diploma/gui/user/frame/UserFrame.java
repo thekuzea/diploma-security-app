@@ -1,4 +1,4 @@
-package com.thekuzea.diploma.gui.frame;
+package com.thekuzea.diploma.gui.user.frame;
 
 import com.thekuzea.diploma.model.App;
 import com.thekuzea.diploma.model.User;

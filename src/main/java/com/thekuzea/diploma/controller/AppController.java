@@ -1,6 +1,6 @@
 package com.thekuzea.diploma.controller;
 
-import com.thekuzea.diploma.gui.prompt.AddNewApp;
+import com.thekuzea.diploma.gui.admin.prompt.AddNewApp;
 import org.springframework.stereotype.Controller;
 
 @Controller

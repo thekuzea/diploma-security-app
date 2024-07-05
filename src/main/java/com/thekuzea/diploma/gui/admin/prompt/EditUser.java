@@ -1,4 +1,4 @@
-package com.thekuzea.diploma.gui.prompt;
+package com.thekuzea.diploma.gui.admin.prompt;
 
 import com.thekuzea.diploma.model.App;
 import com.thekuzea.diploma.model.User;

@@ -1,7 +1,7 @@
-package com.thekuzea.diploma.gui.panel;
+package com.thekuzea.diploma.gui.admin.panel;
 
-import com.thekuzea.diploma.gui.prompt.AddNewUser;
-import com.thekuzea.diploma.gui.prompt.EditUser;
+import com.thekuzea.diploma.gui.admin.prompt.AddNewUser;
+import com.thekuzea.diploma.gui.admin.prompt.EditUser;
 import com.thekuzea.diploma.model.User;
 import com.thekuzea.diploma.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
