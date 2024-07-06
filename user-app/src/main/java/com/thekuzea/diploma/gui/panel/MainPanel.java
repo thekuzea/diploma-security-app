@@ -6,7 +6,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-public class UserMainPanel extends JPanel {
+public class MainPanel {
 
     private static final int MAIN_WINDOW_DESCRIPTION_WIDTH = 200;
 

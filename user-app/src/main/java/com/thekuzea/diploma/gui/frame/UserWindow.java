@@ -10,9 +10,9 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.thekuzea.diploma.config.async.AsyncConfig;
-import com.thekuzea.diploma.gui.panel.UserAppsInnerPanel;
-import com.thekuzea.diploma.gui.panel.UserMainPanel;
-import com.thekuzea.diploma.gui.panel.UserWebsitesInnerPanel;
+import com.thekuzea.diploma.gui.panel.AppsInnerPanel;
+import com.thekuzea.diploma.gui.panel.MainPanel;
+import com.thekuzea.diploma.gui.panel.WebsitesInnerPanel;
 import com.thekuzea.diploma.common.persistence.domain.user.User;
 import com.thekuzea.diploma.common.persistence.domain.user.UserRepository;
 
@@ -32,9 +32,9 @@ public class UserWindow {
 
     private final UserRepository userRepository;
 
-    private UserWebsitesInnerPanel userWebsitesInnerPanel;
+    private WebsitesInnerPanel websitesInnerPanel;
 
-    private UserAppsInnerPanel userAppsInnerPanel;
+    private AppsInnerPanel appsInnerPanel;
 
     private User currentUser;
 
@@ -47,13 +47,13 @@ public class UserWindow {
         userFrame.setSize(USER_WINDOW_WIDTH, USER_WINDOW_HEIGHT);
         userFrame.setLocationRelativeTo(null);
 
-        this.userWebsitesInnerPanel = new UserWebsitesInnerPanel(currentUser);
-        final JPanel websitesPanel = userWebsitesInnerPanel.createPanel();
+        this.websitesInnerPanel = new WebsitesInnerPanel(currentUser);
+        final JPanel websitesPanel = websitesInnerPanel.createPanel();
 
-        this.userAppsInnerPanel = new UserAppsInnerPanel(currentUser);
-        final JPanel appsPanel = userAppsInnerPanel.createPanel();
+        this.appsInnerPanel = new AppsInnerPanel(currentUser);
+        final JPanel appsPanel = appsInnerPanel.createPanel();
 
-        final JPanel mainPanel = new UserMainPanel().createMainPanel(websitesPanel, appsPanel);
+        final JPanel mainPanel = new MainPanel().createMainPanel(websitesPanel, appsPanel);
         userFrame.add(mainPanel);
 
         userFrame.setVisible(true);
@@ -64,7 +64,7 @@ public class UserWindow {
     public void redrawLists() {
         currentUser = userRepository.findByUsername(USERNAME);
 
-        userWebsitesInnerPanel.reinitializeModel();
-        userAppsInnerPanel.reinitializeModel();
+        websitesInnerPanel.reinitializeModel();
+        appsInnerPanel.reinitializeModel();
     }
 }

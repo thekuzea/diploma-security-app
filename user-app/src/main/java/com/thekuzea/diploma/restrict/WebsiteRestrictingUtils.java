@@ -12,6 +12,7 @@ import org.springframework.util.CollectionUtils;
 
 import com.thekuzea.diploma.common.persistence.domain.website.Website;
 
+import static com.thekuzea.diploma.common.constant.GlobalConstants.SPACE;
 import static com.thekuzea.diploma.restrict.OperatingSystemUtils.MAC;
 import static com.thekuzea.diploma.restrict.OperatingSystemUtils.OS_NAME;
 
@@ -74,7 +75,7 @@ public final class WebsiteRestrictingUtils {
 
                 for (final Website website : websiteList) {
                     if (website.isRestricted() && !hostsFileContent.toString().contains(website.getUrl())) {
-                        out.println(LOCALHOST_IPV4_ADDRESS + " " + website.getUrl());
+                        out.println(LOCALHOST_IPV4_ADDRESS + SPACE + website.getUrl());
                     }
                 }
             }

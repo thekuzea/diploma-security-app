@@ -5,9 +5,9 @@ import java.util.List;
 import com.thekuzea.diploma.common.persistence.domain.app.App;
 import com.thekuzea.diploma.common.persistence.domain.user.User;
 
-public class UserAppsInnerPanel extends AbstractInnerPanel<App> {
+public class AppsInnerPanel extends AbstractInnerPanel<App> {
 
-    public UserAppsInnerPanel(final User currentUser) {
+    public AppsInnerPanel(final User currentUser) {
         super(currentUser);
     }
 

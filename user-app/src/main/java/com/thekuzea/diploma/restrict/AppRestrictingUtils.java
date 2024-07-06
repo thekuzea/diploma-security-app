@@ -16,6 +16,7 @@ import org.springframework.util.CollectionUtils;
 import com.thekuzea.diploma.common.persistence.domain.app.App;
 import com.thekuzea.diploma.common.persistence.model.RestrictedEntity;
 
+import static com.thekuzea.diploma.common.constant.GlobalConstants.SPACE;
 import static com.thekuzea.diploma.restrict.OperatingSystemUtils.MAC;
 import static com.thekuzea.diploma.restrict.OperatingSystemUtils.OS_NAME;
 
@@ -26,8 +27,6 @@ public class AppRestrictingUtils {
     private static final String GET_APP_LIST_COMMAND = "ps -e";
 
     private static final String KILL_COMMAND = "kill";
-
-    private static final String SPACE_DELIMITER = " ";
 
     private static final int MAC_PROCESS_ID_INDEX = 1;
 
@@ -57,7 +56,7 @@ public class AppRestrictingUtils {
 
     private static void killProcess(final String processInformation) {
         try {
-            final String processId = processInformation.split(SPACE_DELIMITER)[PROCESS_ID_INDEX];
+            final String processId = processInformation.split(SPACE)[PROCESS_ID_INDEX];
             executeCommand(KILL_COMMAND, processId);
         } catch (IOException e) {
             log.error("Kill command failure. reason: {}", e.getMessage());
