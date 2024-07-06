@@ -1,7 +1,7 @@
 package com.thekuzea.diploma.controller;
 
 import com.thekuzea.diploma.gui.admin.frame.AdminFrame;
-import com.thekuzea.diploma.gui.user.frame.UserFrame;
+import com.thekuzea.diploma.gui.user.frame.UserWindow;
 import com.thekuzea.diploma.model.User;
 import com.thekuzea.diploma.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,15 +13,15 @@ import static com.thekuzea.diploma.MainClass.USERNAME;
 public class MainController {
 
     private AdminFrame adminFrame;
-    private UserFrame userFrame;
+    private UserWindow userWindow;
     private User currentUser;
 
     @Autowired
     private UserRepository userRepository;
 
-    public MainController(AdminFrame adminFrame, UserFrame userFrame) {
+    public MainController(AdminFrame adminFrame, UserWindow userWindow) {
         this.adminFrame = adminFrame;
-        this.userFrame = userFrame;
+        this.userWindow = userWindow;
     }
 
     public void prepareAndOpenFrame() {
@@ -30,7 +30,7 @@ public class MainController {
         if(currentUser.getRole().equals("admin")) {
             adminFrame.setVisible(true);
         } else {
-            userFrame.setVisible(true);
+            userWindow.setVisible(true);
         }
     }
 

@@ -1,7 +1,5 @@
 package com.thekuzea.diploma.restrict;
 
-import com.thekuzea.diploma.model.Website;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -11,6 +9,8 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.CollectionUtils;
+
+import com.thekuzea.diploma.model.Website;
 
 import static com.thekuzea.diploma.restrict.OperatingSystemUtils.MAC;
 import static com.thekuzea.diploma.restrict.OperatingSystemUtils.OS_NAME;
