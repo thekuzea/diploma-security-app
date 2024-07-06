@@ -15,8 +15,6 @@ import com.thekuzea.diploma.gui.panel.UserMainPanel;
 import com.thekuzea.diploma.gui.panel.UserWebsitesInnerPanel;
 import com.thekuzea.diploma.common.persistence.domain.user.User;
 import com.thekuzea.diploma.common.persistence.domain.user.UserRepository;
-import com.thekuzea.diploma.restrict.AppRestrictingUtils;
-import com.thekuzea.diploma.restrict.WebsiteRestrictingUtils;
 
 import static com.thekuzea.diploma.UserApplication.USERNAME;
 
@@ -31,8 +29,6 @@ public class UserWindow {
     private static final int USER_WINDOW_HEIGHT = 430;
 
     private static final int DB_SCAN_AND_REDRAW_DELAY_MILLIS = 3000;
-
-    private static final int APPLY_RESTRICTIONS_DELAY_MILLIS = 5000;
 
     private final UserRepository userRepository;
 
@@ -70,17 +66,5 @@ public class UserWindow {
 
         userWebsitesInnerPanel.reinitializeModel();
         userAppsInnerPanel.reinitializeModel();
-    }
-
-    @Async(AsyncConfig.ASYNC_JOBS_THREAD_POOL_BEAN_BANE)
-    @Scheduled(fixedDelay = APPLY_RESTRICTIONS_DELAY_MILLIS)
-    public void configureWebsiteRestrictions() {
-        WebsiteRestrictingUtils.updateHostsFileOnDemand(currentUser.getForbiddenWebsites());
-    }
-
-    @Async(AsyncConfig.ASYNC_JOBS_THREAD_POOL_BEAN_BANE)
-    @Scheduled(fixedDelay = APPLY_RESTRICTIONS_DELAY_MILLIS)
-    public void configureAppRestrictions() {
-        AppRestrictingUtils.queryProcessListAndKillOnDemand(currentUser.getForbiddenApps());
     }
 }
