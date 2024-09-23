@@ -1,13 +1,21 @@
-package com.thekuzea.diploma.gui.prompt;
+package com.thekuzea.diploma.gui.prompt.user;
 
-import com.thekuzea.diploma.gui.panel.UsersPanel;
-import com.thekuzea.diploma.common.persistence.domain.user.User;
-import com.thekuzea.diploma.common.persistence.domain.user.UserRepository;
+import java.awt.FlowLayout;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.swing.*;
-import java.awt.*;
+import com.thekuzea.diploma.common.persistence.domain.user.User;
+import com.thekuzea.diploma.common.persistence.domain.user.UserRepository;
+import com.thekuzea.diploma.gui.panel.user.UsersPanel;
+
+import static com.thekuzea.diploma.common.constant.GlobalConstants.EMPTY_STRING;
+import static com.thekuzea.diploma.gui.constant.ActionButtons.SUBMIT;
 
 @Component
 public class AddNewUser extends JFrame {
@@ -47,7 +55,7 @@ public class AddNewUser extends JFrame {
         roleLabel = new JLabel("Role: ");
         roleText = new JTextField(20);
 
-        submit = new JButton("Submit");
+        submit = new JButton(SUBMIT);
         submit.addActionListener(e -> {
             if(usernameText.getText().length() > 0) {
                 transmittableUser = User.builder()
@@ -72,8 +80,8 @@ public class AddNewUser extends JFrame {
     }
 
     private void destroyWindow() {
-        usernameText.setText("");
-        roleText.setText("");
+        usernameText.setText(EMPTY_STRING);
+        roleText.setText(EMPTY_STRING);
 
         this.setVisible(false);
     }

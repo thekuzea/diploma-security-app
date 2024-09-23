@@ -1,17 +1,33 @@
-package com.thekuzea.diploma.gui.panel;
+package com.thekuzea.diploma.gui.panel.user;
 
-import com.thekuzea.diploma.gui.prompt.AddNewUser;
-import com.thekuzea.diploma.gui.prompt.EditUser;
-import com.thekuzea.diploma.common.persistence.domain.user.User;
-import com.thekuzea.diploma.common.persistence.domain.user.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.List;
+import javax.swing.AbstractAction;
+import javax.swing.DefaultListModel;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.KeyStroke;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import com.thekuzea.diploma.common.persistence.domain.user.User;
+import com.thekuzea.diploma.common.persistence.domain.user.UserRepository;
+import com.thekuzea.diploma.gui.panel.restriction.AppsPanel;
+import com.thekuzea.diploma.gui.panel.restriction.WebsitesPanel;
+import com.thekuzea.diploma.gui.prompt.user.AddNewUser;
+import com.thekuzea.diploma.gui.prompt.user.EditUser;
+
+import static com.thekuzea.diploma.gui.constant.ActionButtons.ADD;
+import static com.thekuzea.diploma.gui.constant.ActionButtons.EDIT;
+import static com.thekuzea.diploma.gui.constant.ActionButtons.REMOVE;
 
 @Component
 public class UsersPanel extends JPanel {
@@ -112,7 +128,7 @@ public class UsersPanel extends JPanel {
     }
 
     private JButton getAddUser() {
-        addUser = new JButton("+");
+        addUser = new JButton(ADD);
 
         addUser.addActionListener(e -> {
             addNewUserFrame.setVisible(true);
@@ -122,7 +138,7 @@ public class UsersPanel extends JPanel {
     }
 
     private JButton getRemoveUser() {
-        removeUser = new JButton("-");
+        removeUser = new JButton(REMOVE);
 
         removeUser.addActionListener(e -> {
             if (listOfUsers.getSelectedIndex() >= 0) {
@@ -137,7 +153,7 @@ public class UsersPanel extends JPanel {
     }
 
     private JButton getEditUser() {
-        editUser = new JButton("✎");
+        editUser = new JButton(EDIT);
 
         editUser.addActionListener(e -> {
             if (listOfUsers.getSelectedIndex() >= 0) {

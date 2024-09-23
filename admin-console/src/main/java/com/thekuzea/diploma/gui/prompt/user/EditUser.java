@@ -1,17 +1,30 @@
-package com.thekuzea.diploma.gui.prompt;
+package com.thekuzea.diploma.gui.prompt.user;
 
-import com.thekuzea.diploma.common.persistence.domain.app.App;
-import com.thekuzea.diploma.common.persistence.domain.user.User;
-import com.thekuzea.diploma.common.persistence.domain.website.Website;
-import com.thekuzea.diploma.common.persistence.domain.app.AppRepository;
-import com.thekuzea.diploma.common.persistence.domain.user.UserRepository;
-import com.thekuzea.diploma.common.persistence.domain.website.WebsiteRepository;
-import org.springframework.stereotype.Component;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.DefaultListModel;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+
+import org.springframework.stereotype.Component;
+
+import com.thekuzea.diploma.common.persistence.domain.app.App;
+import com.thekuzea.diploma.common.persistence.domain.app.AppRepository;
+import com.thekuzea.diploma.common.persistence.domain.user.User;
+import com.thekuzea.diploma.common.persistence.domain.user.UserRepository;
+import com.thekuzea.diploma.common.persistence.domain.website.Website;
+import com.thekuzea.diploma.common.persistence.domain.website.WebsiteRepository;
+
+import static com.thekuzea.diploma.common.constant.GlobalConstants.EMPTY_STRING;
+import static com.thekuzea.diploma.gui.constant.ActionButtons.CLEAR;
+import static com.thekuzea.diploma.gui.constant.ActionButtons.SUBMIT;
 
 @Component
 public class EditUser extends JFrame {
@@ -19,23 +32,33 @@ public class EditUser extends JFrame {
     private JPanel mainPanel;
 
     private JLabel usernameLabel;
+
     private JTextField usernameText;
 
     private JLabel websitesLabel;
+
     private JList<Website> websiteJList;
+
     private DefaultListModel<Website> websitesModel;
+
     private JScrollPane websiteScrollPane;
 
     private JLabel appsLabel;
+
     private JList<App> appJList;
+
     private DefaultListModel<App> appsModel;
+
     private JScrollPane appScrollPane;
 
     private JButton submit;
+
     private JButton deselectEverything;
 
     private UserRepository userRepository;
+
     private WebsiteRepository websiteRepository;
+
     private AppRepository appRepository;
 
     private User transmittableUser;
@@ -66,13 +89,13 @@ public class EditUser extends JFrame {
     private void reloadLists() {
         websitesModel.clear();
         List<Website> tempWebsiteList = websiteRepository.findAll();
-        for(int i=0; i != tempWebsiteList.size(); ++i) {
+        for (int i = 0; i != tempWebsiteList.size(); ++i) {
             websitesModel.add(i, tempWebsiteList.get(i));
         }
 
         appsModel.clear();
         List<App> tempAppList = appRepository.findAll();
-        for(int i=0; i != tempAppList.size(); ++i) {
+        for (int i = 0; i != tempAppList.size(); ++i) {
             appsModel.add(i, tempAppList.get(i));
         }
     }
@@ -80,9 +103,9 @@ public class EditUser extends JFrame {
     private void selectIndicesOfWebsiteList() {
         try {
             List<Integer> tempListOfIndices = new ArrayList<>();
-            for(int i=0; i != websitesModel.size(); ++i) {
-                for(Website it : transmittableUser.getForbiddenWebsites()) {
-                    if(websitesModel.get(i).equals(it)) {
+            for (int i = 0; i != websitesModel.size(); ++i) {
+                for (Website it : transmittableUser.getForbiddenWebsites()) {
+                    if (websitesModel.get(i).equals(it)) {
                         tempListOfIndices.add(i);
                     }
                 }
@@ -90,18 +113,19 @@ public class EditUser extends JFrame {
 
             int[] indices = tempListOfIndices
                     .stream()
-                    .mapToInt(i->i)
+                    .mapToInt(i -> i)
                     .toArray();
             websiteJList.setSelectedIndices(indices);
-        } catch (NullPointerException ignored) { }
+        } catch (NullPointerException ignored) {
+        }
     }
 
     private void selectIndicesOfAppList() {
         try {
             List<Integer> tempListOfIndices = new ArrayList<>();
-            for(int i=0; i != appsModel.size(); ++i) {
-                for(App it : transmittableUser.getForbiddenApps()) {
-                    if(appsModel.get(i).equals(it)) {
+            for (int i = 0; i != appsModel.size(); ++i) {
+                for (App it : transmittableUser.getForbiddenApps()) {
+                    if (appsModel.get(i).equals(it)) {
                         tempListOfIndices.add(i);
                     }
                 }
@@ -109,10 +133,11 @@ public class EditUser extends JFrame {
 
             int[] indices = tempListOfIndices
                     .stream()
-                    .mapToInt(i->i)
+                    .mapToInt(i -> i)
                     .toArray();
             appJList.setSelectedIndices(indices);
-        } catch (NullPointerException ignored) { }
+        } catch (NullPointerException ignored) {
+        }
     }
 
     private JPanel getMainPanel() {
@@ -153,7 +178,7 @@ public class EditUser extends JFrame {
         websitesModel = new DefaultListModel<>();
 
         List<Website> tempList = websiteRepository.findAll();
-        for(int i=0; i != tempList.size(); ++i) {
+        for (int i = 0; i != tempList.size(); ++i) {
             websitesModel.add(i, tempList.get(i));
         }
 
@@ -181,7 +206,7 @@ public class EditUser extends JFrame {
         appsModel = new DefaultListModel<>();
 
         List<App> tempList = appRepository.findAll();
-        for(int i=0; i != tempList.size(); ++i) {
+        for (int i = 0; i != tempList.size(); ++i) {
             appsModel.add(i, tempList.get(i));
         }
 
@@ -201,13 +226,13 @@ public class EditUser extends JFrame {
     }
 
     private JButton getSubmit() {
-        submit = new JButton("Submit");
+        submit = new JButton(SUBMIT);
 
         submit.addActionListener(e -> {
             int[] websiteIndices = websiteJList.getSelectedIndices();
             List<Website> tempWebsitesList = new ArrayList<>();
 
-            for(int i=0; i != websiteIndices.length; ++i) {
+            for (int i = 0; i != websiteIndices.length; ++i) {
                 tempWebsitesList.add(websitesModel.getElementAt(websiteIndices[i]));
             }
             transmittableUser.setForbiddenWebsites(tempWebsitesList);
@@ -215,14 +240,14 @@ public class EditUser extends JFrame {
             int[] appIndices = appJList.getSelectedIndices();
             List<App> tempAppList = new ArrayList<>();
 
-            for(int i=0; i != appIndices.length; ++i) {
+            for (int i = 0; i != appIndices.length; ++i) {
                 tempAppList.add(appsModel.getElementAt(appIndices[i]));
             }
             transmittableUser.setForbiddenApps(tempAppList);
 
             userRepository.save(transmittableUser);
 
-            usernameText.setText("");
+            usernameText.setText(EMPTY_STRING);
             this.setVisible(false);
         });
 
@@ -230,7 +255,7 @@ public class EditUser extends JFrame {
     }
 
     private JButton getDeselectEverything() {
-        deselectEverything = new JButton("Clear");
+        deselectEverything = new JButton(CLEAR);
 
         deselectEverything.addActionListener(e -> {
             websiteJList.clearSelection();
@@ -239,4 +264,4 @@ public class EditUser extends JFrame {
 
         return deselectEverything;
     }
- }
+}
