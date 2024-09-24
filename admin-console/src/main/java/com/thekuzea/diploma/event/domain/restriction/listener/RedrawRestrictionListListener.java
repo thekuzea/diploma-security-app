@@ -5,11 +5,12 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
-import org.springframework.util.CollectionUtils;
 
 import com.thekuzea.diploma.common.persistence.domain.app.App;
 import com.thekuzea.diploma.common.persistence.domain.website.Website;
 import com.thekuzea.diploma.event.domain.restriction.model.RedrawAppListEvent;
+import com.thekuzea.diploma.event.domain.restriction.model.RedrawDefaultAppListEvent;
+import com.thekuzea.diploma.event.domain.restriction.model.RedrawDefaultWebsiteListEvent;
 import com.thekuzea.diploma.event.domain.restriction.model.RedrawWebsiteListEvent;
 import com.thekuzea.diploma.gui.panel.restriction.AppsPanel;
 import com.thekuzea.diploma.gui.panel.restriction.WebsitesPanel;
@@ -25,20 +26,22 @@ public class RedrawRestrictionListListener {
     @EventListener
     public void onRedrawRestrictionAppList(final RedrawAppListEvent event) {
         final List<App> appList = event.getEntityList();
-        if (CollectionUtils.isEmpty(appList)) {
-            appsPanel.redrawList();
-        } else {
-            appsPanel.redrawListFrom(appList);
-        }
+        appsPanel.redrawListFrom(appList);
+    }
+
+    @EventListener(classes = {RedrawDefaultAppListEvent.class})
+    public void onRedrawDefaultRestrictionAppList() {
+        appsPanel.redrawDefaultList();
     }
 
     @EventListener
     public void onRedrawRestrictionWebsiteList(final RedrawWebsiteListEvent event) {
         final List<Website> websiteList = event.getEntityList();
-        if (CollectionUtils.isEmpty(websiteList)) {
-            websitesPanel.redrawList();
-        } else {
-            websitesPanel.redrawListFrom(websiteList);
-        }
+        websitesPanel.redrawListFrom(websiteList);
+    }
+
+    @EventListener(classes = {RedrawDefaultWebsiteListEvent.class})
+    public void onRedrawDefaultRestrictionWebsiteList() {
+        websitesPanel.redrawDefaultList();
     }
 }

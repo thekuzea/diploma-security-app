@@ -55,7 +55,7 @@ public abstract class AbstractRestrictionPanel<T> {
         restrictionsListModel.add(restrictionsListModel.size(), restriction);
     }
 
-    public void redrawList() {
+    public void redrawDefaultList() {
         restrictionsListModel.clear();
 
         final List<T> list = restrictedEntityRepository.findAll();

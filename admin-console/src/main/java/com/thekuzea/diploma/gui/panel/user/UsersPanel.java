@@ -24,6 +24,8 @@ import com.thekuzea.diploma.common.persistence.domain.user.User;
 import com.thekuzea.diploma.common.persistence.domain.user.UserRepository;
 import com.thekuzea.diploma.common.persistence.domain.website.Website;
 import com.thekuzea.diploma.event.domain.restriction.model.RedrawAppListEvent;
+import com.thekuzea.diploma.event.domain.restriction.model.RedrawDefaultAppListEvent;
+import com.thekuzea.diploma.event.domain.restriction.model.RedrawDefaultWebsiteListEvent;
 import com.thekuzea.diploma.event.domain.restriction.model.RedrawWebsiteListEvent;
 import com.thekuzea.diploma.event.domain.user.model.CreateUserFrameEvent;
 import com.thekuzea.diploma.event.domain.user.model.EditUserEntityEvent;
@@ -72,10 +74,10 @@ public class UsersPanel {
             public void actionPerformed(ActionEvent e) {
                 listOfUsers.clearSelection();
 
-                final RedrawWebsiteListEvent websiteEvent = new RedrawWebsiteListEvent(Collections.emptyList());
+                final RedrawDefaultWebsiteListEvent websiteEvent = new RedrawDefaultWebsiteListEvent();
                 eventPublisher.sendEvent(websiteEvent);
 
-                final RedrawAppListEvent appEvent = new RedrawAppListEvent(Collections.emptyList());
+                final RedrawDefaultAppListEvent appEvent = new RedrawDefaultAppListEvent();
                 eventPublisher.sendEvent(appEvent);
             }
         });
