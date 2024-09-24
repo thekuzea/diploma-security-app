@@ -24,7 +24,7 @@ public class MainPanel {
         final JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
 
-        mainPanel.add(usersPanel, BorderLayout.WEST);
+        mainPanel.add(usersPanel.createPanel(), BorderLayout.WEST);
         mainPanel.add(websitesPanel.createPanel(), BorderLayout.CENTER);
         mainPanel.add(appsPanel.createPanel(), BorderLayout.EAST);
 

@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.util.Collections;
 import java.util.List;
 import javax.swing.AbstractAction;
 import javax.swing.DefaultListModel;
@@ -15,89 +16,87 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import com.thekuzea.diploma.common.persistence.domain.app.App;
 import com.thekuzea.diploma.common.persistence.domain.user.User;
 import com.thekuzea.diploma.common.persistence.domain.user.UserRepository;
-import com.thekuzea.diploma.gui.panel.restriction.AppsPanel;
-import com.thekuzea.diploma.gui.panel.restriction.WebsitesPanel;
-import com.thekuzea.diploma.gui.prompt.user.AddNewUser;
-import com.thekuzea.diploma.gui.prompt.user.EditUser;
+import com.thekuzea.diploma.common.persistence.domain.website.Website;
+import com.thekuzea.diploma.event.domain.restriction.model.RedrawAppListEvent;
+import com.thekuzea.diploma.event.domain.restriction.model.RedrawWebsiteListEvent;
+import com.thekuzea.diploma.event.domain.user.model.CreateUserFrameEvent;
+import com.thekuzea.diploma.event.domain.user.model.EditUserEntityEvent;
+import com.thekuzea.diploma.event.publisher.EventPublisher;
 
 import static com.thekuzea.diploma.gui.constant.ActionButtons.ADD;
 import static com.thekuzea.diploma.gui.constant.ActionButtons.EDIT;
 import static com.thekuzea.diploma.gui.constant.ActionButtons.REMOVE;
 
 @Component
-public class UsersPanel extends JPanel {
+@RequiredArgsConstructor
+public class UsersPanel {
 
-    private JLabel message;
+    private static final int PANEL_WIDTH = 250;
+
+    private static final int PANEL_HEIGHT = 320;
+
+    private static final int SCROLL_WIDTH = 230;
+
+    private static final int SCROLL_HEIGHT = 300;
+
+    private final EventPublisher eventPublisher;
+
+    private final UserRepository userRepository;
+
     private JList<User> listOfUsers;
+
     private DefaultListModel<User> usersModel;
-    private JScrollPane listScrollPane;
 
-    private JButton addUser;
-    private JButton removeUser;
-    private JButton editUser;
+    public JPanel createPanel() {
+        final JPanel currentPanel = new JPanel();
+        currentPanel.setLayout(new FlowLayout());
+        currentPanel.setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
 
-    @Autowired
-    private AddNewUser addNewUserFrame;
+        currentPanel.add(createPanelNameMessage());
+        currentPanel.add(createListScrollPane());
+        currentPanel.add(createAddUserButton());
+        currentPanel.add(createRemoveUserButton());
+        currentPanel.add(createEditUserButton());
 
-    @Autowired
-    private EditUser editUserFrame;
-
-    private WebsitesPanel websitesPanel;
-    private AppsPanel appsPanel;
-
-    private UserRepository userRepository;
-
-    public UsersPanel(UserRepository userRepository, WebsitesPanel websitesPanel, AppsPanel appsPanel) {
-        this.userRepository = userRepository;
-
-        this.websitesPanel = websitesPanel;
-        this.appsPanel = appsPanel;
-
-        this.setLayout(new FlowLayout());
-        this.setPreferredSize(new Dimension(250, 320));
-
-        this.add(getMessage());
-        this.add(getListScrollPane());
-        this.add(getAddUser());
-        this.add(getRemoveUser());
-        this.add(getEditUser());
-
-        this.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+        currentPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
                 .put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "deselect");
 
-        this.getActionMap().put("deselect", new AbstractAction() {
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    listOfUsers.clearSelection();
-                } catch (NullPointerException ignored) { }
+        currentPanel.getActionMap().put("deselect", new AbstractAction() {
 
-                websitesPanel.rearrangeList();
-                appsPanel.rearrangeList();
+            public void actionPerformed(ActionEvent e) {
+                listOfUsers.clearSelection();
+
+                final RedrawWebsiteListEvent websiteEvent = new RedrawWebsiteListEvent(Collections.emptyList());
+                eventPublisher.sendEvent(websiteEvent);
+
+                final RedrawAppListEvent appEvent = new RedrawAppListEvent(Collections.emptyList());
+                eventPublisher.sendEvent(appEvent);
             }
         });
+
+        return currentPanel;
     }
 
     public void addNewUser(User transmittableUser) {
         usersModel.add(usersModel.size(), transmittableUser);
     }
 
-    private JLabel getMessage() {
-        message = new JLabel("Users list: ");
-
-        return message;
+    private JLabel createPanelNameMessage() {
+        return new JLabel("Users list: ");
     }
 
     private DefaultListModel<User> getUsersModel() {
         usersModel = new DefaultListModel<>();
 
-        List<User> tempList = userRepository.findAll();
-        for (int i = 0; i != tempList.size(); ++i) {
-            usersModel.add(i, tempList.get(i));
+        final List<User> userList = userRepository.findAll();
+        for (int i = 0; i < userList.size(); i++) {
+            usersModel.add(i, userList.get(i));
         }
 
         return usersModel;
@@ -105,45 +104,50 @@ public class UsersPanel extends JPanel {
 
     private JList<User> getListOfUsers() {
         listOfUsers = new JList<>(getUsersModel());
-
         listOfUsers.setLayoutOrientation(JList.VERTICAL);
+
         listOfUsers.addListSelectionListener(event -> {
-            if (!event.getValueIsAdjusting()) {
-                try {
-                    websitesPanel.rearrangeList(listOfUsers.getSelectedValue().getForbiddenWebsites());
-                    appsPanel.rearrangeList(listOfUsers.getSelectedValue().getForbiddenApps());
-                } catch (NullPointerException ignored) { }
+            if (listOfUsers.getSelectedValue() == null) {
+                return;
             }
+
+            final List<Website> forbiddenWebsites = listOfUsers.getSelectedValue().getForbiddenWebsites();
+            final RedrawWebsiteListEvent websiteEvent = new RedrawWebsiteListEvent(forbiddenWebsites);
+            eventPublisher.sendEvent(websiteEvent);
+
+            final List<App> forbiddenApps = listOfUsers.getSelectedValue().getForbiddenApps();
+            final RedrawAppListEvent appEvent = new RedrawAppListEvent(forbiddenApps);
+            eventPublisher.sendEvent(appEvent);
         });
 
         return listOfUsers;
     }
 
-    private JScrollPane getListScrollPane() {
-        listScrollPane = new JScrollPane(getListOfUsers());
-
-        listScrollPane.setPreferredSize(new Dimension(230, 300));
+    private JScrollPane createListScrollPane() {
+        final JScrollPane listScrollPane = new JScrollPane(getListOfUsers());
+        listScrollPane.setPreferredSize(new Dimension(SCROLL_WIDTH, SCROLL_HEIGHT));
 
         return listScrollPane;
     }
 
-    private JButton getAddUser() {
-        addUser = new JButton(ADD);
+    private JButton createAddUserButton() {
+        final JButton addUser = new JButton(ADD);
 
         addUser.addActionListener(e -> {
-            addNewUserFrame.setVisible(true);
+            final CreateUserFrameEvent event = new CreateUserFrameEvent(CreateUserFrameEvent.Action.ADD);
+            eventPublisher.sendEvent(event);
         });
 
         return addUser;
     }
 
-    private JButton getRemoveUser() {
-        removeUser = new JButton(REMOVE);
+    private JButton createRemoveUserButton() {
+        final JButton removeUser = new JButton(REMOVE);
 
         removeUser.addActionListener(e -> {
             if (listOfUsers.getSelectedIndex() >= 0) {
-                User temp = usersModel.getElementAt(listOfUsers.getSelectedIndex());
-                userRepository.delete(temp);
+                final User selectedUser = usersModel.getElementAt(listOfUsers.getSelectedIndex());
+                userRepository.delete(selectedUser);
 
                 usersModel.remove(listOfUsers.getSelectedIndex());
             }
@@ -152,25 +156,28 @@ public class UsersPanel extends JPanel {
         return removeUser;
     }
 
-    private JButton getEditUser() {
-        editUser = new JButton(EDIT);
+    private JButton createEditUserButton() {
+        final JButton editUser = new JButton(EDIT);
 
         editUser.addActionListener(e -> {
             if (listOfUsers.getSelectedIndex() >= 0) {
-                User temp = usersModel.getElementAt(listOfUsers.getSelectedIndex());
-                editUserFrame.transmitUser(temp);
+                final CreateUserFrameEvent event = new CreateUserFrameEvent(CreateUserFrameEvent.Action.EDIT);
+                eventPublisher.sendEvent(event);
 
-                editUserFrame.setVisible(true);
+                final User user = usersModel.getElementAt(listOfUsers.getSelectedIndex());
+                final EditUserEntityEvent editUserEntityEvent = new EditUserEntityEvent(user);
+                eventPublisher.sendEvent(editUserEntityEvent);
 
-                try {
-                    listOfUsers.clearSelection();
-                } catch (NullPointerException ignored) { }
-                websitesPanel.rearrangeList();
-                appsPanel.rearrangeList();
+                listOfUsers.clearSelection();
+
+                final RedrawWebsiteListEvent websiteEvent = new RedrawWebsiteListEvent(Collections.emptyList());
+                eventPublisher.sendEvent(websiteEvent);
+
+                final RedrawAppListEvent appEvent = new RedrawAppListEvent(Collections.emptyList());
+                eventPublisher.sendEvent(appEvent);
             }
         });
 
         return editUser;
     }
-
 }

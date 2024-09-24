@@ -18,6 +18,7 @@ import com.thekuzea.diploma.event.publisher.EventPublisher;
 
 import static com.thekuzea.diploma.common.constant.GlobalConstants.EMPTY_STRING;
 import static com.thekuzea.diploma.gui.constant.ActionButtons.SUBMIT;
+import static com.thekuzea.diploma.gui.constant.ElementDimensions.TEXT_INPUT_COLUMNS_NUMBER;
 
 @RequiredArgsConstructor
 public abstract class AbstractAddRestrictionFrame<T> {
@@ -25,8 +26,6 @@ public abstract class AbstractAddRestrictionFrame<T> {
     private static final int FRAME_WIDTH = 300;
 
     private static final int FRAME_HEIGHT = 260;
-
-    private static final int TEXT_INPUT_COLUMNS_NUMBER = 20;
 
     private static final int HOURS_TEXT_START_POSITION = 0;
 

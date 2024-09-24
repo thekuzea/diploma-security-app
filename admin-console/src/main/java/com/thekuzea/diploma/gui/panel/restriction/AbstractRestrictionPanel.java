@@ -55,7 +55,7 @@ public abstract class AbstractRestrictionPanel<T> {
         restrictionsListModel.add(restrictionsListModel.size(), restriction);
     }
 
-    public void rearrangeList() {
+    public void redrawList() {
         restrictionsListModel.clear();
 
         final List<T> list = restrictedEntityRepository.findAll();
@@ -64,7 +64,7 @@ public abstract class AbstractRestrictionPanel<T> {
         }
     }
 
-    public void rearrangeList(final List<T> list) {
+    public void redrawListFrom(final List<T> list) {
         restrictionsListModel.clear();
 
         if (list != null) {
@@ -109,6 +109,7 @@ public abstract class AbstractRestrictionPanel<T> {
 
     private JButton createAddRestrictionButton() {
         final JButton addRestriction = new JButton(ADD);
+
         addRestriction.addActionListener(e -> {
             final CreateRestrictionFrameEvent event = new CreateRestrictionFrameEvent(getRestrictionType());
             eventPublisher.sendEvent(event);
