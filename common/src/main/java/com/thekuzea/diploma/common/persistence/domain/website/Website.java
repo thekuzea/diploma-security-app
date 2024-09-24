@@ -1,6 +1,7 @@
 package com.thekuzea.diploma.common.persistence.domain.website;
 
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,6 +16,7 @@ import com.thekuzea.diploma.common.persistence.model.RestrictedEntity;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true, exclude = "id")
 @SuperBuilder
 @Document(collection = "websites")
