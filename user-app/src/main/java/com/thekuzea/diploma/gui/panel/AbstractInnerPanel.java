@@ -12,6 +12,7 @@ import javax.swing.JScrollPane;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.CollectionUtils;
 
 import com.thekuzea.diploma.common.persistence.domain.user.User;
 
@@ -76,6 +77,10 @@ public abstract class AbstractInnerPanel<T> {
 
     private void populateModel() {
         final List<T> restrictedItems = getListOfRestrictedItems();
+        if (CollectionUtils.isEmpty(restrictedItems)) {
+            return;
+        }
+
         for (int i = 0; i < restrictedItems.size(); i++) {
             model.add(i, restrictedItems.get(i));
         }
