@@ -29,7 +29,7 @@ public class RestrictionsScheduler {
         final User currentUser = userRepository.findByUsername(USERNAME);
         log.debug("About to update hosts file and query running processes for user: {}", currentUser.getUsername());
 
-        WebsiteRestrictingUtils.updateHostsFileOnDemand(currentUser.getForbiddenWebsites());
-        AppRestrictingUtils.queryProcessListAndKillOnDemand(currentUser.getForbiddenApps());
+        WebsiteRestrictingUtils.updateHostsFileOnDemand(currentUser.getRestrictedWebsites());
+        AppRestrictingUtils.queryProcessListAndKillOnDemand(currentUser.getRestrictedApps());
     }
 }

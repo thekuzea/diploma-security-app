@@ -18,6 +18,6 @@ public class AppsInnerPanel extends AbstractInnerPanel<App> {
 
     @Override
     protected List<App> getListOfRestrictedItems() {
-        return currentUser.getForbiddenApps();
+        return currentUser.getRestrictedApps();
     }
 }

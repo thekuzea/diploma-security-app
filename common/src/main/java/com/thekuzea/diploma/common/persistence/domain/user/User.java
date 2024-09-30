@@ -1,5 +1,7 @@
 package com.thekuzea.diploma.common.persistence.domain.user;
 
+import java.util.List;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,8 +13,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.List;
-
 import com.thekuzea.diploma.common.persistence.domain.app.App;
 import com.thekuzea.diploma.common.persistence.domain.website.Website;
 
@@ -20,7 +20,7 @@ import com.thekuzea.diploma.common.persistence.domain.website.Website;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-@ToString(exclude = {"id", "forbiddenApps", "forbiddenWebsites"})
+@ToString(exclude = {"id", "restrictedApps", "restrictedWebsites"})
 @Builder
 @Document(collection = "users")
 public class User {
@@ -33,8 +33,8 @@ public class User {
     private String role;
 
     @DBRef
-    private List<App> forbiddenApps;
+    private List<App> restrictedApps;
 
     @DBRef
-    private List<Website> forbiddenWebsites;
+    private List<Website> restrictedWebsites;
 }

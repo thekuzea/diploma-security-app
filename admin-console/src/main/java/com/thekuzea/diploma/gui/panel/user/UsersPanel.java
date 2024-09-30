@@ -113,12 +113,12 @@ public class UsersPanel {
                 return;
             }
 
-            final List<Website> forbiddenWebsites = listOfUsers.getSelectedValue().getForbiddenWebsites();
-            final RedrawWebsiteListEvent websiteEvent = new RedrawWebsiteListEvent(forbiddenWebsites);
+            final List<Website> restrictedWebsites = listOfUsers.getSelectedValue().getRestrictedWebsites();
+            final RedrawWebsiteListEvent websiteEvent = new RedrawWebsiteListEvent(restrictedWebsites);
             eventPublisher.sendEvent(websiteEvent);
 
-            final List<App> forbiddenApps = listOfUsers.getSelectedValue().getForbiddenApps();
-            final RedrawAppListEvent appEvent = new RedrawAppListEvent(forbiddenApps);
+            final List<App> restrictedApps = listOfUsers.getSelectedValue().getRestrictedApps();
+            final RedrawAppListEvent appEvent = new RedrawAppListEvent(restrictedApps);
             eventPublisher.sendEvent(appEvent);
         });
 

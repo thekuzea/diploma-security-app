@@ -89,13 +89,13 @@ public class EditUserFrame {
     }
 
     private void selectIndicesOfWebsiteList() {
-        if (websitesModel == null || currentUpdateUser.getForbiddenWebsites() == null) {
+        if (websitesModel == null || currentUpdateUser.getRestrictedWebsites() == null) {
             return;
         }
 
         final List<Integer> currentUserRestrictedWebsites = new ArrayList<>();
         for (int i = 0; i < websitesModel.size(); i++) {
-            for (Website it : currentUpdateUser.getForbiddenWebsites()) {
+            for (Website it : currentUpdateUser.getRestrictedWebsites()) {
                 if (websitesModel.get(i).equals(it)) {
                     currentUserRestrictedWebsites.add(i);
                 }
@@ -109,13 +109,13 @@ public class EditUserFrame {
     }
 
     private void selectIndicesOfAppList() {
-        if (appsModel == null || currentUpdateUser.getForbiddenApps() == null) {
+        if (appsModel == null || currentUpdateUser.getRestrictedApps() == null) {
             return;
         }
 
         final List<Integer> currentUserRestrictedApps = new ArrayList<>();
         for (int i = 0; i < appsModel.size(); i++) {
-            for (App it : currentUpdateUser.getForbiddenApps()) {
+            for (App it : currentUpdateUser.getRestrictedApps()) {
                 if (appsModel.get(i).equals(it)) {
                     currentUserRestrictedApps.add(i);
                 }
@@ -233,7 +233,7 @@ public class EditUserFrame {
             for (final int websiteIndex : selectedWebsiteIndices) {
                 selectedWebsiteList.add(websitesModel.getElementAt(websiteIndex));
             }
-            currentUpdateUser.setForbiddenWebsites(selectedWebsiteList);
+            currentUpdateUser.setRestrictedWebsites(selectedWebsiteList);
 
             final int[] selectedAppIndices = appJList.getSelectedIndices();
             final List<App> selectedAppList = new ArrayList<>();
@@ -241,7 +241,7 @@ public class EditUserFrame {
             for (final int appIndex : selectedAppIndices) {
                 selectedAppList.add(appsModel.getElementAt(appIndex));
             }
-            currentUpdateUser.setForbiddenApps(selectedAppList);
+            currentUpdateUser.setRestrictedApps(selectedAppList);
 
             userRepository.save(currentUpdateUser);
 

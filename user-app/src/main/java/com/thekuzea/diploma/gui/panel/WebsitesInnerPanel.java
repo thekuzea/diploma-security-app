@@ -18,6 +18,6 @@ public class WebsitesInnerPanel extends AbstractInnerPanel<Website> {
 
     @Override
     protected List<Website> getListOfRestrictedItems() {
-        return currentUser.getForbiddenWebsites();
+        return currentUser.getRestrictedWebsites();
     }
 }
