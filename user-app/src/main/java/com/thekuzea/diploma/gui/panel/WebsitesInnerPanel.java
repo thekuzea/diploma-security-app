@@ -7,17 +7,13 @@ import com.thekuzea.diploma.common.persistence.domain.website.Website;
 
 public class WebsitesInnerPanel extends AbstractInnerPanel<Website> {
 
-    public WebsitesInnerPanel(final User currentUser) {
-        super(currentUser);
-    }
-
     @Override
     protected String getRestrictedItemsZoneName() {
         return "Websites";
     }
 
     @Override
-    protected List<Website> getListOfRestrictedItems() {
-        return currentUser.getRestrictedWebsites();
+    protected List<Website> getListOfRestrictedItems(final User user) {
+        return user.getRestrictedWebsites();
     }
 }

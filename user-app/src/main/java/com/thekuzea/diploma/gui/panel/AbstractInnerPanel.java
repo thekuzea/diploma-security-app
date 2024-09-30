@@ -9,14 +9,12 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
 
 import com.thekuzea.diploma.common.persistence.domain.user.User;
 
-@RequiredArgsConstructor
 public abstract class AbstractInnerPanel<T> {
 
     private static final int PANEL_WIDTH = 300;
@@ -29,28 +27,26 @@ public abstract class AbstractInnerPanel<T> {
 
     protected final Logger log = LoggerFactory.getLogger(getLoggingChildClassName());
 
-    protected final User currentUser;
-
     protected DefaultListModel<T> model;
 
     protected abstract String getRestrictedItemsZoneName();
 
-    protected abstract List<T> getListOfRestrictedItems();
+    protected abstract List<T> getListOfRestrictedItems(final User user);
 
-    public void reinitializeModel() {
+    public void reinitializeModel(final User user) {
         if (model != null) {
             model.clear();
-            populateModel();
+            populateModel(user);
         }
     }
 
-    public JPanel createPanel() {
+    public JPanel createPanel(final User currentUser) {
         final JPanel panel = new JPanel();
         panel.setLayout(new FlowLayout());
         panel.setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
         panel.add(createLabel());
 
-        final JScrollPane scrollPane = new JScrollPane(createListOfItems());
+        final JScrollPane scrollPane = new JScrollPane(createListOfItems(currentUser));
         scrollPane.setPreferredSize(new Dimension(SCROLL_WIDTH, SCROLL_HEIGHT));
         panel.add(scrollPane);
 
@@ -64,10 +60,10 @@ public abstract class AbstractInnerPanel<T> {
         return descriptionLabel;
     }
 
-    private JList<T> createListOfItems() {
+    private JList<T> createListOfItems(final User currentUser) {
         model = new DefaultListModel<>();
 
-        populateModel();
+        populateModel(currentUser);
 
         final JList<T> listOfItems = new JList<>(model);
         listOfItems.setLayoutOrientation(JList.VERTICAL);
@@ -75,8 +71,8 @@ public abstract class AbstractInnerPanel<T> {
         return listOfItems;
     }
 
-    private void populateModel() {
-        final List<T> restrictedItems = getListOfRestrictedItems();
+    private void populateModel(final User user) {
+        final List<T> restrictedItems = getListOfRestrictedItems(user);
         if (CollectionUtils.isEmpty(restrictedItems)) {
             return;
         }

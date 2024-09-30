@@ -35,22 +35,20 @@ public class UserWindow {
 
     private AppsInnerPanel appsInnerPanel;
 
-    private User currentUser;
-
     @PostConstruct
     public void init() {
-        currentUser = userRepository.findByUsername(USERNAME);
+        final User currentUser = userRepository.findByUsername(USERNAME);
 
         final JFrame userFrame = new JFrame();
         userFrame.setTitle(USER_WINDOW_NAME);
         userFrame.setSize(USER_WINDOW_WIDTH, USER_WINDOW_HEIGHT);
         userFrame.setLocationRelativeTo(null);
 
-        this.websitesInnerPanel = new WebsitesInnerPanel(currentUser);
-        final JPanel websitesPanel = websitesInnerPanel.createPanel();
+        websitesInnerPanel = new WebsitesInnerPanel();
+        final JPanel websitesPanel = websitesInnerPanel.createPanel(currentUser);
 
-        this.appsInnerPanel = new AppsInnerPanel(currentUser);
-        final JPanel appsPanel = appsInnerPanel.createPanel();
+        appsInnerPanel = new AppsInnerPanel();
+        final JPanel appsPanel = appsInnerPanel.createPanel(currentUser);
 
         final JPanel mainPanel = new MainPanel().createMainPanel(websitesPanel, appsPanel);
         userFrame.add(mainPanel);
@@ -61,9 +59,9 @@ public class UserWindow {
     @Async(AsyncConfig.ASYNC_JOBS_THREAD_POOL_BEAN_BANE)
     @Scheduled(fixedDelayString = "${local-wall.db-scan-and-redraw-delay-seconds}", timeUnit = TimeUnit.SECONDS)
     public void redrawLists() {
-        currentUser = userRepository.findByUsername(USERNAME);
+        final User currentUser = userRepository.findByUsername(USERNAME);
 
-        websitesInnerPanel.reinitializeModel();
-        appsInnerPanel.reinitializeModel();
+        websitesInnerPanel.reinitializeModel(currentUser);
+        appsInnerPanel.reinitializeModel(currentUser);
     }
 }

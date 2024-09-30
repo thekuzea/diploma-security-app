@@ -7,17 +7,13 @@ import com.thekuzea.diploma.common.persistence.domain.user.User;
 
 public class AppsInnerPanel extends AbstractInnerPanel<App> {
 
-    public AppsInnerPanel(final User currentUser) {
-        super(currentUser);
-    }
-
     @Override
     protected String getRestrictedItemsZoneName() {
         return "Applications";
     }
 
     @Override
-    protected List<App> getListOfRestrictedItems() {
-        return currentUser.getRestrictedApps();
+    protected List<App> getListOfRestrictedItems(final User user) {
+        return user.getRestrictedApps();
     }
 }
