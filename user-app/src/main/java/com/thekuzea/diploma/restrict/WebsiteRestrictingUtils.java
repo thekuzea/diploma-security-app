@@ -69,14 +69,16 @@ public final class WebsiteRestrictingUtils {
     }
 
     private static void updateHostsFile(final List<Website> websiteList, final StringBuilder hostsFileContent) {
-        try {
-            try (final PrintWriter out = new PrintWriter(HOSTS_FILE.getAbsoluteFile())) {
-                out.print(hostsFileContent);
+        if (log.isDebugEnabled()) {
+            log.debug("About to update hosts file with following restrictions: {}", websiteList);
+        }
 
-                for (final Website website : websiteList) {
-                    if (website.isRestricted() && !hostsFileContent.toString().contains(website.getUrl())) {
-                        out.println(LOCALHOST_IPV4_ADDRESS + SPACE + website.getUrl());
-                    }
+        try (final PrintWriter out = new PrintWriter(HOSTS_FILE.getAbsoluteFile())) {
+            out.print(hostsFileContent);
+
+            for (final Website website : websiteList) {
+                if (website.isRestricted() && !hostsFileContent.toString().contains(website.getUrl())) {
+                    out.println(LOCALHOST_IPV4_ADDRESS + SPACE + website.getUrl());
                 }
             }
         } catch (IOException e) {

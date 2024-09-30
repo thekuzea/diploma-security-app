@@ -10,6 +10,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.thekuzea.diploma.common.persistence.domain.user.User;
 
@@ -23,6 +25,8 @@ public abstract class AbstractInnerPanel<T> {
     private static final int SCROLL_WIDTH = 250;
 
     private static final int SCROLL_HEIGHT = 300;
+
+    protected final Logger log = LoggerFactory.getLogger(getLoggingChildClassName());
 
     protected final User currentUser;
 
@@ -75,5 +79,13 @@ public abstract class AbstractInnerPanel<T> {
         for (int i = 0; i < restrictedItems.size(); i++) {
             model.add(i, restrictedItems.get(i));
         }
+
+        if (log.isDebugEnabled()) {
+            log.debug("Populating list model with restricted items: {}", restrictedItems);
+        }
+    }
+
+    private Class<?> getLoggingChildClassName() {
+        return this.getClass();
     }
 }

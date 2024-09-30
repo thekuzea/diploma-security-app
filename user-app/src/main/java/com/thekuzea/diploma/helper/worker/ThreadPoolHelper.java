@@ -25,6 +25,12 @@ public final class ThreadPoolHelper {
         );
 
         executor.initialize();
+
+        log.debug(
+                "Created thread pool with: min size [{}], max size [{}], queue length [{}], thread name prefix [{}]",
+                settings.getMinPoolSize(), settings.getMaxPoolSize(), settings.getQueueLength(), settings.getThreadNamePrefix()
+        );
+
         return executor;
     }
 }

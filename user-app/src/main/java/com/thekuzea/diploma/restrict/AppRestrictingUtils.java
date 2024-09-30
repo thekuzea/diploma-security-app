@@ -80,6 +80,10 @@ public class AppRestrictingUtils {
     }
 
     private static Process executeCommand(final String... commandArgs) throws IOException {
+        if (log.isDebugEnabled()) {
+            log.debug("About to execute command: {}", commandArgs);
+        }
+
         return Runtime.getRuntime().exec(commandArgs);
     }
 }

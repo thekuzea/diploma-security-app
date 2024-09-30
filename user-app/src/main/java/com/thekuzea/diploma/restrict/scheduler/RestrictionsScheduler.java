@@ -1,6 +1,7 @@
 package com.thekuzea.diploma.restrict.scheduler;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -13,6 +14,7 @@ import com.thekuzea.diploma.restrict.WebsiteRestrictingUtils;
 
 import static com.thekuzea.diploma.UserApplication.USERNAME;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class RestrictionsScheduler {
@@ -25,6 +27,7 @@ public class RestrictionsScheduler {
     @Scheduled(fixedDelay = APPLY_RESTRICTIONS_DELAY_MILLIS)
     public void configureRestrictions() {
         final User currentUser = userRepository.findByUsername(USERNAME);
+        log.debug("About to update hosts file and query running processes for user: {}", currentUser.getUsername());
 
         WebsiteRestrictingUtils.updateHostsFileOnDemand(currentUser.getForbiddenWebsites());
         AppRestrictingUtils.queryProcessListAndKillOnDemand(currentUser.getForbiddenApps());
