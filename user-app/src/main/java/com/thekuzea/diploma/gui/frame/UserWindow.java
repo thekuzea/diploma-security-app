@@ -16,8 +16,7 @@ import com.thekuzea.diploma.gui.panel.MainPanel;
 import com.thekuzea.diploma.gui.panel.WebsitesInnerPanel;
 import com.thekuzea.diploma.common.persistence.domain.user.User;
 import com.thekuzea.diploma.common.persistence.domain.user.UserRepository;
-
-import static com.thekuzea.diploma.UserApplication.USERNAME;
+import com.thekuzea.diploma.helper.user.CurrentUserService;
 
 @Component
 @RequiredArgsConstructor
@@ -31,13 +30,16 @@ public class UserWindow {
 
     private final UserRepository userRepository;
 
+    private final CurrentUserService currentUserService;
+
     private WebsitesInnerPanel websitesInnerPanel;
 
     private AppsInnerPanel appsInnerPanel;
 
     @PostConstruct
     public void init() {
-        final User currentUser = userRepository.findByUsername(USERNAME);
+        final String currentUsername = currentUserService.getCurrentUser();
+        final User currentUser = userRepository.findByUsername(currentUsername);
 
         final JFrame userFrame = new JFrame();
         userFrame.setTitle(USER_WINDOW_NAME);
@@ -59,7 +61,8 @@ public class UserWindow {
     @Async(AsyncConfig.ASYNC_JOBS_THREAD_POOL_BEAN_BANE)
     @Scheduled(fixedDelayString = "${local-wall.db-scan-and-redraw-delay-seconds}", timeUnit = TimeUnit.SECONDS)
     public void redrawLists() {
-        final User currentUser = userRepository.findByUsername(USERNAME);
+        final String currentUsername = currentUserService.getCurrentUser();
+        final User currentUser = userRepository.findByUsername(currentUsername);
 
         websitesInnerPanel.reinitializeModel(currentUser);
         appsInnerPanel.reinitializeModel(currentUser);

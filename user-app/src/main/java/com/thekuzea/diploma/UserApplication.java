@@ -8,8 +8,6 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 @SpringBootApplication
 public class UserApplication {
 
-    public static String USERNAME = "user";
-
     public static void main(String[] args) {
         new SpringApplicationBuilder(UserApplication.class)
                 .web(WebApplicationType.NONE)
