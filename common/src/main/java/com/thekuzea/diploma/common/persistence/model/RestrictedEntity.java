@@ -8,15 +8,15 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 import lombok.experimental.SuperBuilder;
+
+import com.thekuzea.diploma.common.utils.DateTimeUtils;
 
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode
-@ToString
 @SuperBuilder
 public class RestrictedEntity {
 
@@ -33,5 +33,12 @@ public class RestrictedEntity {
 
         final LocalTime currentTime = LocalTime.now();
         return currentTime.isAfter(restrictionStartTime) && currentTime.isBefore(restrictionEndTime);
+    }
+
+    @Override
+    public String toString() {
+        return DateTimeUtils.formatTime(restrictionStartTime) +
+                ((isInfiniteRestriction) ? "always" : "-") +
+                DateTimeUtils.formatTime(restrictionEndTime);
     }
 }

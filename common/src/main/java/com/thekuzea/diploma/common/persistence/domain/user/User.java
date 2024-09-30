@@ -8,7 +8,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -20,7 +19,6 @@ import com.thekuzea.diploma.common.persistence.domain.website.Website;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-@ToString(exclude = {"id", "restrictedApps", "restrictedWebsites"})
 @Builder
 @Document(collection = "users")
 public class User {
@@ -37,4 +35,9 @@ public class User {
 
     @DBRef
     private List<Website> restrictedWebsites;
+
+    @Override
+    public String toString() {
+        return username;
+    }
 }
