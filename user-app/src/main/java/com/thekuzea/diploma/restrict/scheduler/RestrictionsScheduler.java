@@ -1,5 +1,7 @@
 package com.thekuzea.diploma.restrict.scheduler;
 
+import java.util.concurrent.TimeUnit;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
@@ -19,12 +21,10 @@ import static com.thekuzea.diploma.UserApplication.USERNAME;
 @RequiredArgsConstructor
 public class RestrictionsScheduler {
 
-    private static final int APPLY_RESTRICTIONS_DELAY_MILLIS = 5000;
-
     private final UserRepository userRepository;
 
     @Async(AsyncConfig.ASYNC_JOBS_THREAD_POOL_BEAN_BANE)
-    @Scheduled(fixedDelay = APPLY_RESTRICTIONS_DELAY_MILLIS)
+    @Scheduled(fixedDelayString = "${local-wall.apply-restrictions-delay-seconds}", timeUnit = TimeUnit.SECONDS)
     public void configureRestrictions() {
         final User currentUser = userRepository.findByUsername(USERNAME);
         log.debug("About to update hosts file and query running processes for user: {}", currentUser.getUsername());

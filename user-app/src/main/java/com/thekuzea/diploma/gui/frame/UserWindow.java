@@ -1,5 +1,6 @@
 package com.thekuzea.diploma.gui.frame;
 
+import java.util.concurrent.TimeUnit;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -27,8 +28,6 @@ public class UserWindow {
     private static final int USER_WINDOW_WIDTH = 630;
 
     private static final int USER_WINDOW_HEIGHT = 430;
-
-    private static final int DB_SCAN_AND_REDRAW_DELAY_MILLIS = 3000;
 
     private final UserRepository userRepository;
 
@@ -60,7 +59,7 @@ public class UserWindow {
     }
 
     @Async(AsyncConfig.ASYNC_JOBS_THREAD_POOL_BEAN_BANE)
-    @Scheduled(fixedRate = DB_SCAN_AND_REDRAW_DELAY_MILLIS)
+    @Scheduled(fixedDelayString = "${local-wall.db-scan-and-redraw-delay-seconds}", timeUnit = TimeUnit.SECONDS)
     public void redrawLists() {
         currentUser = userRepository.findByUsername(USERNAME);
 
